@@ -25,7 +25,7 @@ function insert_user($user)
     $conn = null;
 }
 
-function inviter($hote, $adresse_invite, $id_foyer)
+function inviter($adresse_invite, $id_foyer)
 {
     $invite = select_user_by_mail($adresse_invite);
     if ($invite == null)
