@@ -14,10 +14,15 @@ switch ($_POST['action']) {
         else
             echo json_encode(array('identified' => false));
         break;
+
+
     default:
         echo "Tu es bien sur l'API de weNeed";
         break;
 }
+
+
+//functions
 
 function login($idToken)
 {
