@@ -9,10 +9,7 @@ require_once('fonctionsDB.php');
 
 switch ($_POST['action']) {
     case 'login':
-        if (login($_POST['idToken']))
-            echo json_encode(array('identified' => true));
-        else
-            echo json_encode(array('identified' => false));
+        echo(login($_POST['idToken']));
         break;
 
 
@@ -30,10 +27,11 @@ function login($idToken)
     $arr = json_decode(file_get_contents($url), true);
     if ($arr['aud'] == '715904460526-p13om3375npci6q0sd2hdbj37tq38oul.apps.googleusercontent.com') {
         $usr = array($arr['sub'], $arr['name'], $arr['email']);
-        insert_user($usr);
-        return true;
+        $id = insert_user($usr);
+        return json_encode(array('identified' => true, 'id' => $id,
+            'name' => $arr['name'], 'email' => $arr['email']));
     }
-    return false;
+    return json_encode(array('identified' => false));
     //echo json_encode($json);
     //$arr = array('test'=>'coucou');
     //echo json_encode($arr);

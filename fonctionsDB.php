@@ -18,11 +18,14 @@ function insert_user($user)
 
     $query_select = $conn->prepare("SELECT id FROM users WHERE id_google = ?");
     $query_select->execute(array($user[0]));
+    $id = $query_select->fetchAll()[0][0];
     if ($query_select->rowCount() == 0) {
         $query_insert = $conn->prepare("INSERT into users VALUES (DEFAULT , ?, ?, ?)");
         $query_insert->execute(array($user[0], $user[1], $user[2]));
+        $id = $conn->lastInsertId();
     }
     $conn = null;
+    return $id;
 }
 
 function inviter($adresse_invite, $id_foyer)
