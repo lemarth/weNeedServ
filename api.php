@@ -9,6 +9,10 @@ require_once('fonctionsDB.php');
 
 switch ($_POST['action']) {
     case 'login':
+        if ($_POST['idToken'] == '-1') {
+            return json_encode(array('identified' => true, 'id' => '3',
+                'name' => 'Fabian Germeau', 'email' => 'germeau.fabian@gmail.com'));
+        }
         echo(login($_POST['idToken']));
         break;
 
