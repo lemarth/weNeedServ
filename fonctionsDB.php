@@ -51,3 +51,40 @@ function select_user_by_mail($mail)
     $conn = null;
     return $res;
 }
+
+function select_invitations($id_google)
+{
+
+    $conn = connect();
+
+    $query = $conn->prepare("SELECT * FROM users_foyers WHERE id_user = ? AND etat = 'pending'");
+    $query->execute(array($id_google));
+    $res = null;
+    if ($query->rowCount() > 0)
+        $res = $query->fetchAll();
+    $conn = null;
+    return $res;
+}
+
+function update_etat_invitation($id_invitation, $answer)
+{
+    $reponses = array('declined', 'accepted');
+    $conn = connect();
+
+    $query = $conn->prepare("UPDATE users_foyers SET etat = ?");
+    $query->execute(array($reponses[$answer]));
+
+    $conn = null;
+}
+
+function select_foyers($id_google)
+{
+    $conn = connect();
+    $query = $conn->prepare("SELECT * FROM users_foyers WHERE id_user = ? AND etat ='accepted'");
+    $query->execute(array($id_google));
+    $res = null;
+    if ($query->rowCount() > 0)
+        $res = $query->fetchAll();
+    $conn = null;
+    return $res;
+}
