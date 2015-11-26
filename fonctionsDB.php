@@ -71,8 +71,8 @@ function update_etat_invitation($id_invitation, $answer)
     $reponses = array('declined', 'accepted');
     $conn = connect();
 
-    $query = $conn->prepare("UPDATE users_foyers SET etat = ?");
-    $query->execute(array($reponses[$answer]));
+    $query = $conn->prepare("UPDATE users_foyers SET etat = ? WHERE id = ?");
+    $query->execute(array($reponses[$answer], $id_invitation));
 
     $conn = null;
 }
