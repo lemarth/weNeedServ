@@ -22,6 +22,12 @@ switch ($_POST['action']) {
         }
         break;
 
+    case 'ajout_article':
+        if (identify($_POST['id_google'])) {
+            echo ajoutArticles($_POST['id_foyer'], $_POST['name_article'], $_POST['quantite']);
+        }
+        break;
+
     default:
         echo "Tu es bien sur l'API de weNeed";
         break;
@@ -55,5 +61,14 @@ function getFoyers($id)
     return json_encode(array_merge(array("number" => sizeof($arr)), $arr));
 }
 
+function ajout_article($id_foyer, $name_article, $quantite)
+{
+    $article = array($id_foyer, $name_article, $quantite);
+    $arr = insert_article($article);
+    if ($arr == null) {
+        return json_encode(array("success" => false));
+    }
+    return json_encode(array("success" => true));
+}
 
 

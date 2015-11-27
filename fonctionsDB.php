@@ -39,6 +39,18 @@ function insert_user($user)
     return $id;
 }
 
+function insert_article($article)
+{
+    $conn = connect();
+
+    $query_insert = $conn->prepare("INSERT INTO articles VALUES (DEFAULT, ?, ?, ?) ");
+    $query_insert->execute(array($article[0], $article[1], $article[2]));
+    $id = $conn->lastInsertId();
+
+    $conn = null;
+    return $id;
+}
+
 function inviter($adresse_invite, $id_foyer)
 {
     $invite = select_user_by_mail($adresse_invite);
