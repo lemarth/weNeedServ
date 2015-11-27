@@ -30,7 +30,7 @@ switch ($_POST['action']) {
 
     case 'ajout_article':
         if (identify($_POST['id_google'])) {
-            echo ajoutArticles($_POST['id_foyer'], $_POST['name_article'], $_POST['quantite']);
+            echo ajoutArticle($_POST['id_foyer'], $_POST['name_article'], $_POST['quantite']);
         }
         break;
 
