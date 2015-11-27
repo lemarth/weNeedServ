@@ -10,12 +10,17 @@ require_once('fonctionsDB.php');
 switch ($_POST['action']) {
     case 'login':
         if ($_POST['idToken'] == '-1') {
-            return json_encode(array('identified' => true, 'id' => '3',
-                'name' => 'Fabian Germeau', 'email' => 'germeau.fabian@gmail.com'));
+            echo json_encode(array('identified' => true, 'id' => '3',
+                'name' => 'Fabian Germeau', 'email' => 'germeau.fabian@gmail.com', 'id_google' => -1));
         }
         echo(login($_POST['idToken']));
         break;
 
+    case 'get_foyers':
+        if (identify($_POST['id_google'])) {
+            echo getFoyers($_POST['id']);
+        }
+        break;
 
     default:
         echo "Tu es bien sur l'API de weNeed";
@@ -33,12 +38,21 @@ function login($idToken)
         $usr = array($arr['sub'], $arr['name'], $arr['email']);
         $id = insert_user($usr);
         return json_encode(array('identified' => true, 'id' => $id,
-            'name' => $arr['name'], 'email' => $arr['email']));
+            'name' => $arr['name'], 'email' => $arr['email'], 'id_google' => $arr['sub']));
     }
     return json_encode(array('identified' => false));
     //echo json_encode($json);
     //$arr = array('test'=>'coucou');
     //echo json_encode($arr);
+}
+
+function getFoyers($id)
+{
+    $arr = select_foyers($id);
+    if ($arr == null) {
+        return json_encode(array("number" => 0));
+    }
+    return json_encode(array_merge(array("number" => sizeof($arr)), $arr));
 }
 
 

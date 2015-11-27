@@ -12,6 +12,17 @@ function connect()
 
 }
 
+function identify($id)
+{
+    $conn = connect();
+    $query_select = $conn->prepare("SELECT id FROM users WHERE id_google = ?");
+    $query_select->execute(array($id));
+    $conn = null;
+    if ($query_select->rowCount() > 0)
+        return true;
+    return false;
+}
+
 function insert_user($user)
 {
     $conn = connect();
@@ -55,13 +66,12 @@ function select_user_by_mail($mail)
     return $res;
 }
 
-function select_invitations($id_google)
+function select_invitations($id)
 {
-
     $conn = connect();
 
     $query = $conn->prepare("SELECT * FROM users_foyers WHERE id_user = ? AND etat = 'pending'");
-    $query->execute(array($id_google));
+    $query->execute(array($id));
     $res = null;
     if ($query->rowCount() > 0)
         $res = $query->fetchAll();
@@ -80,14 +90,32 @@ function update_etat_invitation($id_invitation, $answer)
     $conn = null;
 }
 
-function select_foyers($id_google)
+function select_foyers($id)
 {
     $conn = connect();
-    $query = $conn->prepare("SELECT * FROM users_foyers WHERE id_user = ? AND etat ='accepted'");
-    $query->execute(array($id_google));
+
+    $select_id_nom = $conn->prepare("SELECT DISTINCT f.id, f.nom FROM users_foyers uf, foyers f WHERE uf.id_user = ?
+                                      AND uf.etat ='accepted' AND f.id = uf.id_foyer");
+    $select_id_nom->execute(array($id));
     $res = null;
-    if ($query->rowCount() > 0)
-        $res = $query->fetchAll();
+    if ($select_id_nom->rowCount() > 0) {
+        $res = array();
+        $rows = $select_id_nom->fetchAll();
+        $select_nom_users = $conn->prepare("SELECT u.nom FROM users u, users_foyers uf WHERE u.id = uf.id_user AND
+                                              uf.id_foyer = ?");
+        $i = 0;
+        foreach ($rows as $row) {
+            $res[$i] = array('id' => $row[0], 'name' => $row[1], 'users' => array());
+            $select_nom_users->execute(array($row[0]));
+            $rows2 = $select_nom_users->fetchAll();
+            $j = 0;
+            foreach ($rows2 as $row2) {
+                $res[$i]['users'][$j] = $row2[0];
+                $j++;
+            }
+            $i++;
+        }
+    }
     $conn = null;
-    return $res;
+    return $res; //[[id,nom,[nom1,nom2]], id2, nom2,[nom3,nom4]]
 }
