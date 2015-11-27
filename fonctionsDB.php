@@ -30,10 +30,9 @@ function insert_user($user)
     $query_select = $conn->prepare("SELECT id FROM users WHERE id_google = ?");
     $query_select->execute(array($user[0]));
     $id = $query_select->fetchAll()[0][0];
-    $etat = "en attente";
     if ($query_select->rowCount() == 0) {
-        $query_insert = $conn->prepare("INSERT INTO users VALUES (DEFAULT , ?, ?, ?, ?)");
-        $query_insert->execute(array($user[0], $user[2], $etat, $user[1]));
+        $query_insert = $conn->prepare("INSERT INTO users VALUES (DEFAULT , ?, ?, ?)");
+        $query_insert->execute(array($user[0], $user[1], $user[2]));
         $id = $conn->lastInsertId();
     }
     $conn = null;
@@ -44,8 +43,9 @@ function insert_article($article)
 {
     $conn = connect();
 
-    $query_insert = $conn->prepare("INSERT INTO articles VALUES (DEFAULT, ?, ?, ?) ");
-    $query_insert->execute(array($article[0], $article[1], $article[2]));
+    $etat = "en attente";
+    $query_insert = $conn->prepare("INSERT INTO articles VALUES (DEFAULT, ?, ?, ?, ?) ");
+    $query_insert->execute(array($article[0], $article[2], $etat, $article[1]));
     $id = $conn->lastInsertId();
 
     $conn = null;
