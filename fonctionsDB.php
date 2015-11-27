@@ -31,7 +31,7 @@ function insert_user($user)
     $query_select->execute(array($user[0]));
     $id = $query_select->fetchAll()[0][0];
     if ($query_select->rowCount() == 0) {
-        $query_insert = $conn->prepare("INSERT into users VALUES (DEFAULT , ?, ?, ?)");
+        $query_insert = $conn->prepare("INSERT INTO users VALUES (DEFAULT , ?, ?, ?)");
         $query_insert->execute(array($user[0], $user[1], $user[2]));
         $id = $conn->lastInsertId();
     }
@@ -82,11 +82,18 @@ function select_invitations($id)
 {
     $conn = connect();
 
-    $query = $conn->prepare("SELECT * FROM users_foyers WHERE id_user = ? AND etat = 'pending'");
+    $query = $conn->prepare("SELECT f.id, f.nom FROM users_foyers uf, foyers f WHERE uf.id_user = ?
+AND uf.etat = 'pending' AND uf.id_foyer = f.id");
     $query->execute(array($id));
-    $res = null;
-    if ($query->rowCount() > 0)
-        $res = $query->fetchAll();
+    $res = array();
+    if ($query->rowCount() > 0) {
+        $rows = $query->fetchAll();
+        $i = 0;
+        foreach ($rows as $row) {
+            $res[$i] = array('id' => $row['id'], 'name' => $row['nom']);
+            $i++;
+        }
+    }
     $conn = null;
     return $res;
 }
@@ -115,14 +122,23 @@ function select_foyers($id)
         $rows = $select_id_nom->fetchAll();
         $select_nom_users = $conn->prepare("SELECT u.nom FROM users u, users_foyers uf WHERE u.id = uf.id_user AND
                                               uf.id_foyer = ?");
+        $select_articles = $conn->prepare("SELECT * FROM articles WHERE id_foyer = ?");
         $i = 0;
         foreach ($rows as $row) {
-            $res[$i] = array('id' => $row[0], 'name' => $row[1], 'users' => array());
+            $res[$i] = array('id' => $row[0], 'name' => $row[1], 'users' => array(), 'articles' => array());
             $select_nom_users->execute(array($row[0]));
             $rows2 = $select_nom_users->fetchAll();
             $j = 0;
             foreach ($rows2 as $row2) {
                 $res[$i]['users'][$j] = $row2[0];
+                $j++;
+            }
+            $select_articles->execute(array($row[0]));
+            $rows2 = $select_articles->fetchAll();
+            $j = 0;
+            foreach ($rows2 as $row2) {
+                $res[$i]['articles'][$j] = array('id' => $row2['id'], 'quantite' => $row2['quantite'], 'etat' => $row2['etat'],
+                    'name' => $row2['name'], 'id_foyer' => $row2['id_foyer']);
                 $j++;
             }
             $i++;

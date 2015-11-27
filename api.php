@@ -22,6 +22,12 @@ switch ($_POST['action']) {
         }
         break;
 
+    case 'get_invitations':
+        if (identify($_POST['id_google'])) {
+            echo getInvitations($_POST['id']);
+        }
+        break;
+
     case 'ajout_article':
         if (identify($_POST['id_google'])) {
             echo ajoutArticles($_POST['id_foyer'], $_POST['name_article'], $_POST['quantite']);
@@ -61,6 +67,10 @@ function getFoyers($id)
     return json_encode(array_merge(array("number" => sizeof($arr)), $arr));
 }
 
+function getInvitations($id)
+{
+    return select_invitations($id);
+}
 function ajout_article($id_foyer, $name_article, $quantite)
 {
     $article = array($id_foyer, $name_article, $quantite);
