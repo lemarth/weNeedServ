@@ -71,7 +71,8 @@ function getInvitations($id)
 {
     return select_invitations($id);
 }
-function ajout_article($id_foyer, $name_article, $quantite)
+
+function ajoutArticle($id_foyer, $name_article, $quantite)
 {
     $article = array($id_foyer, $name_article, $quantite);
     $arr = insert_article($article);
