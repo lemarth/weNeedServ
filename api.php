@@ -38,6 +38,10 @@ switch ($_POST['action']) {
         if (identify($_POST['id_google'])) {
             echo repondreInvitation($_POST['id_invitation'], $_POST['reponse']);
         }
+    case 'modifier_etat':
+        if (identify($_POST['id_google'])) {
+            echo modifierEtat($_POST['id_article'], $_POST['etat']);
+        }
     default:
         echo "Tu es bien sur l'API de weNeed";
         break;
@@ -92,7 +96,16 @@ function repondreInvitation($id_invitation, $reponse)
     if ($arr == null) {
         return json_encode(array("success" => false));
     }
-    return json_encode(array("success" => true));
+    return json_encode(array("success" => $arr));
+}
+
+function modifierEtat($id_article, $etat)
+{
+    $arr = update_etat_article($id_article, $etat);
+    if ($arr == null) {
+        return json_encode(array("success" => false));
+    }
+    return json_encode(array("success" => $arr));
 }
 
 

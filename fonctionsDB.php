@@ -52,6 +52,23 @@ function insert_article($article)
     return $id;
 }
 
+function update_etat_article($id_article, $etat)
+{
+    $conn = connect();
+
+    $query = $conn->prepare("UPDATE articles SET etat = ? WHERE id = ?");
+    $query->execute(array($etat, $id_article));
+    $query = $conn->prepare("SELECT * FROM articles WHERE id = ? AND etat <> ?");
+    $query->execute(array($id_article, $etat));
+    if ($query->rowCount() == 0) {
+        $res = true;
+    } else {
+        $res = false;
+    }
+    $conn = null;
+    return $res;
+}
+
 function inviter($adresse_invite, $id_foyer)
 {
     $invite = select_user_by_mail($adresse_invite);
