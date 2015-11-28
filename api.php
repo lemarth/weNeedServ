@@ -36,7 +36,7 @@ switch ($_POST['action']) {
 
     case 'repondre_invitation':
         if (identify($_POST['id_google'])) {
-            echo update_etat_invitation($_POST['id_invitation'], $_POST['reponse']);
+            update_etat_invitation($_POST['id_invitation'], $_POST['reponse']);
         }
     default:
         echo "Tu es bien sur l'API de weNeed";
