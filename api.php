@@ -54,7 +54,7 @@ switch ($_POST['action']) {
 
     case 'inviter':
         if (identify($_POST['id_google'])) {
-            echo inviter($_POST['adresse_invite'], $_POST['id_foyer']);
+            echo inviter_($_POST['adresse_invite'], $_POST['id_foyer']);
         }
         break;
 
@@ -131,6 +131,15 @@ function modifierEtat($id_article, $etat)
         return json_encode(array("success" => false));
     }
     return json_encode(array("success" => $arr));
+}
+
+function inviter_($adresse_invite, $id_foyer)
+{
+    $arr = inviter($adresse_invite, $id_foyer);
+    if ($arr == null) {
+        return json_encode(array("success" => false));
+    }
+    return json_encode(array("success" => true));
 }
 
 
