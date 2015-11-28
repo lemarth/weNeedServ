@@ -94,7 +94,7 @@ function inviter($adresse_invite, $id_foyer)
     $conn = connect();
 
     $query = $conn->prepare("INSERT INTO users_foyers VALUES (DEFAULT , ?, ?, 'pending')");
-    $query->execute(array($invite['id_google'], $id_foyer));
+    $query->execute(array($invite['id'], $id_foyer));
 
     $conn = null;
     return true;
