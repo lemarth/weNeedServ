@@ -52,12 +52,29 @@ function insert_article($article)
     return $id;
 }
 
+function insert_foyer($nom, $id)
+{
+    $conn = connect();
+
+
+    $query_insert = $conn->prepare("INSERT INTO foyers VALUES (DEFAULT, ?)");
+    $query_insert->execute(array($nom));
+    $id_foyer = $conn->lastInsertId();
+
+    $query = $conn->prepare("INSERT INTO users_foyers VALUES (DEFAULT, ?, ?, 'accepted')");
+    $query->execute(array($id, $id_foyer));
+    $id_users_foyers = $conn->lastInsertId();
+
+    $conn = null;
+    return $id_users_foyers;
+}
+
 function update_etat_article($id_article, $etat)
 {
     $conn = connect();
 
-    $query = $conn->prepare("UPDATE articles SET etat = ? WHERE id = ?");
-    $query->execute(array($etat, $id_article));
+    $query_update = $conn->prepare("UPDATE articles SET etat = ? WHERE id = ?");
+    $query_update->execute(array($etat, $id_article));
     $query = $conn->prepare("SELECT * FROM articles WHERE id = ? AND etat <> ?");
     $query->execute(array($id_article, $etat));
     if ($query->rowCount() == 0) {

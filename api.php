@@ -34,14 +34,24 @@ switch ($_POST['action']) {
         }
         break;
 
+    case 'ajout_foyer':
+        if (identify($_POST['id_google'])) {
+            echo ajoutFoyer($_POST['nom'], $_POST['id']);
+        }
+        break;
+
     case 'repondre_invitation':
         if (identify($_POST['id_google'])) {
             echo repondreInvitation($_POST['id_invitation'], $_POST['reponse']);
         }
+        break;
+
     case 'modifier_etat':
         if (identify($_POST['id_google'])) {
             echo modifierEtat($_POST['id_article'], $_POST['etat']);
         }
+        break;
+
     default:
         echo "Tu es bien sur l'API de weNeed";
         break;
@@ -84,6 +94,15 @@ function ajoutArticle($id_foyer, $name_article, $quantite)
 {
     $article = array($id_foyer, $name_article, $quantite);
     $arr = insert_article($article);
+    if ($arr == null) {
+        return json_encode(array("success" => false));
+    }
+    return json_encode(array("success" => true));
+}
+
+function ajoutFoyer($nom, $id)
+{
+    $arr = insert_foyer($nom, $id);
     if ($arr == null) {
         return json_encode(array("success" => false));
     }
