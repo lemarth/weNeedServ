@@ -101,13 +101,20 @@ function select_invitations($id)
 
 function update_etat_invitation($id_invitation, $answer)
 {
-    $reponses = array('declined', 'accepted');
+
     $conn = connect();
 
     $query = $conn->prepare("UPDATE users_foyers SET etat = ? WHERE id = ?");
-    $query->execute(array($reponses[$answer], $id_invitation));
-
+    $select_invitation = $conn->prepare("SELECT * FROM users_foyers WHERE id = ? AND etat = 'pending'");
+    $query->execute(array($answer, $id_invitation));
+    $select_invitation->execute(array($id_invitation));
+    if ($select_invitation->rowCount() > 0) {
+        $res = false;
+    } else {
+        $res = true;
+    }
     $conn = null;
+    return $res;
 }
 
 function select_foyers($id)

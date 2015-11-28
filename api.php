@@ -36,7 +36,7 @@ switch ($_POST['action']) {
 
     case 'repondre_invitation':
         if (identify($_POST['id_google'])) {
-            update_etat_invitation($_POST['id_invitation'], $_POST['reponse']);
+            echo repondreInvitation($_POST['id_invitation'], $_POST['reponse']);
         }
     default:
         echo "Tu es bien sur l'API de weNeed";
@@ -80,6 +80,15 @@ function ajoutArticle($id_foyer, $name_article, $quantite)
 {
     $article = array($id_foyer, $name_article, $quantite);
     $arr = insert_article($article);
+    if ($arr == null) {
+        return json_encode(array("success" => false));
+    }
+    return json_encode(array("success" => true));
+}
+
+function repondreInvitation($id_invitation, $reponse)
+{
+    $arr = update_etat_invitation($id_invitation, $reponse);
     if ($arr == null) {
         return json_encode(array("success" => false));
     }
