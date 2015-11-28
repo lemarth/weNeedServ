@@ -56,6 +56,7 @@ switch ($_POST['action']) {
         if (identify($_POST['id_google'])) {
             echo inviter($_POST['adresse_invite'], $_POST['id_foyer']);
         }
+        break;
 
     default:
         echo "Tu es bien sur l'API de weNeed";
