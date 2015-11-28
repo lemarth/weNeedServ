@@ -69,7 +69,7 @@ function getFoyers($id)
 
 function getInvitations($id)
 {
-    return select_invitations($id);
+    return json_encode(select_invitations($id));
 }
 
 function ajoutArticle($id_foyer, $name_article, $quantite)
