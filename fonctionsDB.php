@@ -83,8 +83,8 @@ function select_invitations($id)
 {
     $conn = connect();
 
-    $query = $conn->prepare("SELECT f.id, f.nom FROM users_foyers uf, foyers f WHERE uf.id_user = ?
-AND uf.etat = 'pending' AND uf.id_foyer = f.id");
+    $query = $conn->prepare("SELECT uf.id, f.nom FROM users_foyers uf, foyers f WHERE uf.id_user = ?
+                                                        AND uf.etat = 'pending' AND uf.id_foyer = f.id");
     $query->execute(array($id));
     $res = array();
     if ($query->rowCount() > 0) {
