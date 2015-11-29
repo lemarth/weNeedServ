@@ -70,8 +70,15 @@ switch ($_POST['action']) {
         }
         break;
 
+
+    case'delete_articles_achetes':
+        if (identify($_POST['id_google'])) {
+            delArticlesAchetes($_POST['id']);
+        }
+        break;
+
     default:
-        echo "Tu es bien sur l'API de weNeed";
+        echo "Vous êtes bien sur l'API de weNeed";
         break;
 }
 
