@@ -123,11 +123,14 @@ function repondreInvitation($id_invitation, $reponse)
 
 function modifierEtat($id_article, $etat)
 {
-    $arr = update_etat_article($id_article, $etat);
-    if ($arr == null) {
-        return json_encode(array("success" => false));
+    $id_array = json_decode($id_article);
+    foreach ($id_array as $item) {
+        $arr = update_etat_article($item, $etat);
+        if ($arr == null or $arr == false) {
+            return json_encode(array("success" => false));
+        }
     }
-    return json_encode(array("success" => $arr));
+    return json_encode(array("success" => true));
 }
 
 function inviter_($adresse_invite, $id_foyer)
