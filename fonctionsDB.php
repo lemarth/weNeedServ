@@ -94,7 +94,7 @@ function inviter($adresse_invite, $id_foyer)
     $conn = connect();
 
     $query_select = $conn->prepare("SELECT * FROM users_foyers WHERE id_user = ? AND id_foyer =?");
-    $query_select->execute(array($invite, $id_foyer));
+    $query_select->execute(array($invite['id'], $id_foyer));
     if ($query_select->rowCount() > 0)
         return true;
     $query = $conn->prepare("INSERT INTO users_foyers VALUES (DEFAULT , ?, ?, 'pending')");
@@ -208,7 +208,17 @@ function get_location_of_user($id, $lat, $long)
     return $res;
 }
 
-function get_magasins($id, $lat, $long)
+function get_magasins($lat, $long)
 {
-
+    $conn = connect();
+    $query = $conn->prepare("SELECT * FROM magasins WHERE latitude  LIKE ? AND longitude LIKE ?");
+    $query->execute(array($lat . '%', $long . '%'));
+    $res = array();
+    $i = 0;
+    foreach ($query->fetchAll() as $row) {
+        $res[$i] = array('latitude' => $row['latitude'], 'longitude' => $row['longitude'], 'nom' => $row['nom']);
+        $i++;
+    }
+    $conn = null;
+    return $res;
 }

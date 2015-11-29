@@ -66,7 +66,7 @@ switch ($_POST['action']) {
 
     case 'get_magasins':
         if (identify($_POST['id_google'])) {
-            echo getMagasins($_POST['id'], $_POST['latitude'], $_POST['longitude']);
+            echo getMagasins($_POST['latitude'], $_POST['longitude']);
         }
         break;
 
@@ -159,7 +159,7 @@ function getLocation($id, $lat, $long)
     return json_encode(get_location_of_user($id, $lat, $long));
 }
 
-function getMagasins($id, $lat, $long)
+function getMagasins($lat, $long)
 {
-    return json_encode((get_magasins($id, $lat, $long)));
+    return json_encode((get_magasins($lat, $long)));
 }
