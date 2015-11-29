@@ -58,6 +58,12 @@ switch ($_POST['action']) {
         }
         break;
 
+    case 'get_location':
+        if (identify($_POST['id_google'])) {
+            echo getLocation($_POST['id'], $_POST['latitude'], $_POST['longitude']);
+        }
+        break;
+
     default:
         echo "Tu es bien sur l'API de weNeed";
         break;
@@ -139,4 +145,7 @@ function inviter_($adresse_invite, $id_foyer)
     return json_encode(array("success" => true));
 }
 
-
+function getLocation($id, $lat, $long)
+{
+    return json_encode(get_location_of_user($id, $lat, $long));
+}

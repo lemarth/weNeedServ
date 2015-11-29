@@ -189,3 +189,17 @@ function select_foyers($id)
     $conn = null;
     return $res; //[[id,nom,[nom1,nom2]], id2, nom2,[nom3,nom4]]
 }
+
+function get_location_of_user($id, $lat, $long)
+{
+    $conn = connect();
+
+    $query_select = $conn->prepare("SELECT lat, lon, date_pos FROM users WHERE id = ?");
+    $query_select->execute(array($id));
+    $row = $query_select->fetchAll()[0];
+    $query_update = $conn->prepare("UPDATE users SET lat = ?, lon = ?, date_pos = now() WHERE id = ?");
+    $query_update->execute(array($lat, $long, $id));
+    $res = array("latitude" => $row[0], "longitude" => $row[1], "date" => $row[2]);
+    $conn = null;
+    return $res;
+}
