@@ -64,6 +64,12 @@ switch ($_POST['action']) {
         }
         break;
 
+    case 'get_magasins':
+        if (identify($_POST['id_google'])) {
+            echo getMagasins($_POST['id'], $_POST['latitude'], $_POST['longitude']);
+        }
+        break;
+
     default:
         echo "Tu es bien sur l'API de weNeed";
         break;
@@ -151,4 +157,9 @@ function inviter_($adresse_invite, $id_foyer)
 function getLocation($id, $lat, $long)
 {
     return json_encode(get_location_of_user($id, $lat, $long));
+}
+
+function getMagasins($id, $lat, $long)
+{
+    return json_encode((get_magasins($id, $lat, $long)));
 }
