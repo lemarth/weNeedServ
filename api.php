@@ -100,10 +100,7 @@ function ajoutArticle($id_foyer, $name_article, $quantite)
 {
     $article = array($id_foyer, $name_article, $quantite);
     $arr = insert_article($article);
-    if ($arr == null) {
-        return json_encode(array("success" => false));
-    }
-    return json_encode(array("success" => true));
+    return json_encode(array("id" => $arr));
 }
 
 function ajoutFoyer($nom, $id)
