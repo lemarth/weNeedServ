@@ -47,6 +47,7 @@ switch ($_POST['action']) {
         break;
 
     case 'modifier_etat':
+        echo "Coucou hibou";
         if (identify($_POST['id_google'])) {
             echo modifierEtat($_POST['id_article'], $_POST['etat']);
         }
