@@ -222,3 +222,15 @@ function get_magasins($lat, $long)
     $conn = null;
     return $res;
 }
+
+function delete_articles_achetes($id)
+{
+    $conn = connect();
+    $query_select = $conn->prepare("SELECT id_foyer FROM users_foyers WHERE id_user = ? AND etat = 'accepted'");
+    $query_select->execute(array($id));
+    $query_delete = $conn->prepare("DELETE FROM articles WHERE id_foyer = ? AND etat = 'achete'");
+    foreach ($query_select->fetchAll() as $row) {
+        $query_delete->execute(array($row['id_foyer']));
+    }
+    $conn = null;
+}

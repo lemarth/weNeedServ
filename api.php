@@ -71,14 +71,14 @@ switch ($_POST['action']) {
         break;
 
 
-    case'delete_articles_achetes':
+    case 'delete_articles_achetes':
         if (identify($_POST['id_google'])) {
             delArticlesAchetes($_POST['id']);
         }
         break;
 
     default:
-        echo "Vous Ãªtes bien sur l'API de weNeed";
+        echo "Vous êtes bien sur l'API de weNeed";
         break;
 }
 
@@ -169,4 +169,9 @@ function getLocation($id, $lat, $long)
 function getMagasins($lat, $long)
 {
     return json_encode((get_magasins($lat, $long)));
+}
+
+function delArticlesAchetes($id)
+{
+    delete_articles_achetes($id);
 }
